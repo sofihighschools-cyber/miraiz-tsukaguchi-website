@@ -801,10 +801,6 @@ table{ border-collapse:collapse; }
   border-radius:var(--r-lg); box-shadow:var(--shadow-lg);
   width:100%; height:clamp(240px, 27vw, 380px); object-fit:cover;
 }
-.access__badge{
-  display:inline-block; font-family:var(--font-round); font-weight:700; font-size:.85rem;
-  background:var(--c-red); color:#fff; padding:.3em 1em; border-radius:999px; margin-bottom:.8rem;
-}
 .access__text h3{ font-size:clamp(1.2rem,2.4vw,1.7rem); margin-bottom:.9rem; }
 .access__dl{ margin:1.2rem 0; display:grid; grid-template-columns:auto 1fr; gap:.1rem 1rem; font-size:.94rem; }
 .access__dl dt{
