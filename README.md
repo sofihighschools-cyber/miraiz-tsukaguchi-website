@@ -7,6 +7,10 @@ SOFI株式会社が2026年9月に開校するフリースクール「MIRAIZ（�
 ```
 miraiz-website/
 ├── index.html                        … 1ページ完結のサイト本体
+├── news.html                         … note・PR TIMES連携のお知らせ一覧
+├── data/news.json                    … 自動取得したお知らせデータ
+├── scripts/update-news.py            … 公式RSSの取得・整形スクリプト
+├── .github/workflows/update-news.yml … 6時間ごとの自動更新
 ├── assets/
 │   ├── css/style.css                 … スタイル（MIRAIZロゴから採色したカラーパレット）
 │   ├── js/main.js                    … ドロワー、スクロール演出、フォーム送信
@@ -78,6 +82,21 @@ const FALLBACK_MAIL_TO = 'miraiz.tsukaguchi.info@gmail.com';
 ## 公開方法
 
 静的ファイルのみなので、置くだけで動きます。
+
+## お知らせの自動連携
+
+`news.html` は、MIRAIZ塚口のnote公式RSSとSOFI株式会社のPR TIMES公式RSSから取得した記事を、日付順にまとめて表示します。
+
+- GitHub Actionsが6時間ごとに `scripts/update-news.py` を実行
+- 更新がある場合だけ `data/news.json` をコミット
+- RSS取得に一時的に失敗した場合は、前回取得済みの記事を保持
+- GitHubの「Actions」→「お知らせ自動更新」→「Run workflow」から手動更新も可能
+
+ローカルで更新する場合：
+
+```bash
+python3 scripts/update-news.py
+```
 
 - **Xserverなどのレンタルサーバー**：`index.html`、`robots.txt`、`.nojekyll`、`assets/` を独自ドメインのドキュメントルートへアップロード
 - **Netlify / Vercel / Cloudflare Pages**：このディレクトリを公開ディレクトリに指定（ビルドコマンドなし）

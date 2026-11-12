@@ -1,0 +1,65 @@
+{
+  "updated_at": "2026-11-12T11:52:06.854570+00:00",
+  "sources": {
+    "note": "https://note.com/miraiz_t/rss",
+    "prtimes": "https://prtimes.jp/companyrdf.php?company_id=189122"
+  },
+  "items": [
+    {
+      "source": "note",
+      "title": "不登校の「親の会」、初めて参加する前に何を聞けばいい？",
+      "url": "https://note.com/miraiz_t/n/n78e1f33f21a8",
+      "published": "2026-11-12T20:44:30+09:00",
+      "description": "「同じような経験をしている保護者と話してみたい」「でも、初対面の人に家庭の事情を話すのは少し怖い……」",
+      "image": "https://assets.st-note.com/production/uploads/images/335310900/rectangle_large_type_2_c1f20607db1147ce80b4e0cdb285d7c5.png?width=800"
+    },
+    {
+      "source": "note",
+      "title": "毎朝の欠席連絡がつらいとき。学校と相談したい、続けられる連絡の形",
+      "url": "https://note.com/miraiz_t/n/nfc050c7fcff2",
+      "published": "2026-11-11T13:41:07+09:00",
+      "description": "「今日も学校に電話しなきゃ……」朝、時計を見ながら、気持ちが重くなる。",
+      "image": "https://assets.st-note.com/production/uploads/images/334800040/rectangle_large_type_2_d0541151114c1fd3ef0e56af1b0b5742.png?width=800"
+    },
+    {
+      "source": "prtimes",
+      "title": "地元大学生が、神戸大学大学院教授監修のもと地域企業と連携してフリースクールを阪急塚口に開校",
+      "url": "https://prtimes.jp/main/html/rd/p/000000002.000189122.html",
+      "published": "2026-11-05T08:10:02+09:00",
+      "description": "[SOFI株式会社] 株式会社プラスイノベーション（本社：兵庫県尼崎市東難波町5丁目17番23号 第一住建尼崎ビル6階）が展開する「フリースクールMIRAIZ（ミライズ）」の新たな拠点として、尼崎市・阪急塚口駅より徒歩5分の場所に、...",
+      "image": "https://prcdn.freetls.fastly.net/release_image/189122/2/189122-2-9d56c34b96c2962bfffcd9c58e311241-3900x2925.jpg?format=jpeg&auto=webp&fit=bounds&width=2400&height=1260"
+    },
+    {
+      "source": "note",
+      "title": "子どもがフリースクールの見学を迷う時に保護者が先に聞けること",
+      "url": "https://note.com/miraiz_t/n/n1a0ea61cf194",
+      "published": "2026-11-02T16:24:33+09:00",
+      "description": "「気になるフリースクールはあるけれど、子どもが見学に行きたがらない……」「無理に連れていくのは違う気がする。でも、何もしないままでいいのかな？」",
+      "image": "https://assets.st-note.com/production/uploads/images/331319433/rectangle_large_type_2_551e5627a9b69c1e3fd5c9298c93f02c.png?width=800"
+    },
+    {
+      "source": "note",
+      "title": "行き渋りを学校に相談する前に。話し忘れを減らす短いメモ",
+      "url": "https://note.com/miraiz_t/n/nd389f23ce3cc",
+      "published": "2026-10-30T13:42:26+09:00",
+      "description": "「学校に相談したいけれど、何から話せばいいんだろう？」「朝の様子も、勉強のことも、先生にお願いしたいことも、全部伝えなきゃ……」",
+      "image": "https://assets.st-note.com/production/uploads/images/330108221/rectangle_large_type_2_e8ae8159b64f19a34ee4928349a8fc8d.png?width=800"
+    },
+    {
+      "source": "note",
+      "title": "子どもが学校の話をしたがらない時。理由を聞く前にできる声かけ",
+      "url": "https://note.com/miraiz_t/n/ncbf0f4eddafe",
+      "published": "2026-10-28T10:24:54+09:00",
+      "description": "「今日、学校どうする？」「学校で何かあったの？」",
+      "image": "https://assets.st-note.com/production/uploads/images/329364594/rectangle_large_type_2_3a76ee7dd374d327b3ff6cc924e9de42.png?width=800"
+    },
+    {
+      "source": "note",
+      "title": "フリースクールは出席扱いになる？ 尼崎で在籍校に聞いておきたいこと",
+      "url": "https://note.com/miraiz_t/n/n9a1a74735040",
+      "published": "2026-10-27T22:27:49+09:00",
+      "description": "「フリースクールに通えば、学校の出席になるの？」",
+      "image": "https://assets.st-note.com/production/uploads/images/329223619/rectangle_large_type_2_cebb432cf61c12f4c7c9a2aa30a0fdbe.png?width=800"
+    }
+  ]
+}

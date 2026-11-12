@@ -862,7 +862,7 @@ table{ border-collapse:collapse; }
 /* =========================================================
    RESPONSIVE
    ========================================================= */
-@media (max-width:1180px){
+@media (max-width:1280px){
   .nav__list{ gap:.85rem; }
   .nav__list a{ font-size:.84rem; }
   .btn--line{ display:none; }
