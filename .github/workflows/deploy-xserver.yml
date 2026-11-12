@@ -1,0 +1,172 @@
+name: Deploy to Xserver
+
+on:
+  push:
+    branches: [main]
+  workflow_run:
+    workflows: ["お知らせ自動更新"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: xserver-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: >-
+      github.repository == 'sofihighschools-cyber/miraiz-tsukaguchi-website' &&
+      (github.event_name != 'workflow_run' ||
+       (github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.head_repository.full_name == github.repository)) &&
+      github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SSH_HOST: sv17238.xserver.jp
+      SSH_PORT: "10022"
+      SSH_USER: xs239409
+      SITE_RELATIVE: sofi-school.com/public_html/miraiz.sofi-school.com
+      HOST_FINGERPRINT: SHA256:JW8I6QkDccWlz2UNvbmnKlZzVn9Dc3GL7JLAmUjSLt8
+    steps:
+      # Always fetch current main: update-news commits are newer than workflow_run.head_sha.
+      - name: Checkout current main
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Validate release files
+        shell: bash
+        run: |
+          set -euo pipefail
+          for path in index.html news.html assets data robots.txt sitemap.xml .htaccess; do
+            test -e "$path"
+          done
+          test -z "$(find assets data -type l -print -quit)"
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path("data/news.json").read_text())
+          assert data["items"], "News feed is empty"
+          assert {"note", "prtimes"} <= {item["source"] for item in data["items"]}
+          PY
+          echo "DEPLOY_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Configure SSH and verify server identity
+        shell: bash
+        env:
+          PRIVATE_KEY: ${{ secrets.XSERVER_SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$PRIVATE_KEY" || { echo "::error::XSERVER_SSH_PRIVATE_KEY is missing"; exit 1; }
+          umask 077
+          mkdir -p "$HOME/.ssh"
+          printf '%s\n' "$PRIVATE_KEY" | tr -d '\r' > "$HOME/.ssh/xserver_deploy"
+          unset PRIVATE_KEY
+          ssh-keygen -y -P '' -f "$HOME/.ssh/xserver_deploy" > /dev/null 2>&1 ||
+            { echo "::error::SSH key is invalid or encrypted"; exit 1; }
+          ssh-keyscan -T 20 -p "$SSH_PORT" -t ed25519 "$SSH_HOST" > "$RUNNER_TEMP/xserver_host_key" 2>/dev/null
+          fingerprint="$(ssh-keygen -lf "$RUNNER_TEMP/xserver_host_key" -E sha256 | awk '{print $2}')"
+          test "$fingerprint" = "$HOST_FINGERPRINT" ||
+            { echo "::error::Server host key does not match Xserver control panel"; exit 1; }
+          cp "$RUNNER_TEMP/xserver_host_key" "$HOME/.ssh/known_hosts"
+          cat > "$HOME/.ssh/config" <<EOF
+          Host xserver-production
+            HostName $SSH_HOST
+            User $SSH_USER
+            Port $SSH_PORT
+            IdentityFile $HOME/.ssh/xserver_deploy
+            IdentitiesOnly yes
+            BatchMode yes
+            StrictHostKeyChecking yes
+            UserKnownHostsFile $HOME/.ssh/known_hosts
+            ConnectTimeout 20
+            ServerAliveInterval 15
+            ServerAliveCountMax 3
+          EOF
+
+      - name: Confirm target and back up outside public_html
+        id: backup
+        shell: bash
+        run: |
+          set -euo pipefail
+          backup_id="release-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          ssh xserver-production bash -s -- "$SITE_RELATIVE" "$backup_id" <<'REMOTE'
+          set -euo pipefail
+          target="$HOME/$1"
+          test -d "$target"
+          test ! -L "$target"
+          test "$(realpath "$target")" = "$target"
+          test -f "$target/index.html"
+          command -v rsync > /dev/null
+          backup_root="$HOME/miraiz-deploy-backups"
+          mkdir -p "$backup_root"
+          chmod 700 "$backup_root"
+          archive="$backup_root/$2.tar.gz"
+          test ! -e "$archive"
+          umask 077
+          tar -czf "$archive" -C "$target" .
+          tar -tzf "$archive" > /dev/null
+          # Preserve the exact target path next to each recoverable archive.
+          printf '%s\n' "$target" > "$backup_root/$2.target"
+          echo "Backup completed outside public_html."
+          REMOTE
+          echo "id=$backup_id" >> "$GITHUB_OUTPUT"
+
+      - name: Upload only public site files without deleting remote files
+        shell: bash
+        run: |
+          set -euo pipefail
+          rsync -rlptz --delay-updates --chmod=D755,F644 \
+            index.html news.html assets data robots.txt sitemap.xml .htaccess \
+            "xserver-production:$SITE_RELATIVE/"
+
+      - name: Verify deployed files and public HTTPS endpoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Verify all uploaded bytes on the server, including dotfiles and assets.
+          { printf '%s\0' index.html news.html robots.txt sitemap.xml .htaccess; find assets data -type f -print0; } |
+            sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/deploy-manifest.sha256"
+          ssh xserver-production "cd '$SITE_RELATIVE' && sha256sum --check --quiet" < "$RUNNER_TEMP/deploy-manifest.sha256"
+          for endpoint in / /news /data/news.json /robots.txt /sitemap.xml; do
+            curl --fail --silent --show-error --retry 3 --connect-timeout 20 --max-time 60 \
+              "https://miraiz.sofi-school.com$endpoint" > "$RUNNER_TEMP/response"
+            case "$endpoint" in
+              /) cmp index.html "$RUNNER_TEMP/response" ;;
+              /news) cmp news.html "$RUNNER_TEMP/response" ;;
+              /data/news.json) cmp data/news.json "$RUNNER_TEMP/response" ;;
+              /robots.txt) cmp robots.txt "$RUNNER_TEMP/response" ;;
+              /sitemap.xml) cmp sitemap.xml "$RUNNER_TEMP/response" ;;
+            esac
+          done
+          curl --silent --show-error --connect-timeout 20 --max-time 60 \
+            -D "$RUNNER_TEMP/http-headers" -o /dev/null http://miraiz.sofi-school.com/news
+          grep -Eq '^HTTP/[^ ]+ 30[18]' "$RUNNER_TEMP/http-headers"
+          grep -Eiq '^location: https://miraiz\.sofi-school\.com/news\r?$' "$RUNNER_TEMP/http-headers"
+
+      - name: Record release and recovery location
+        if: always() && steps.backup.outcome == 'success'
+        shell: bash
+        env:
+          BACKUP_ID: ${{ steps.backup.outputs.id }}
+          RESULT: ${{ job.status }}
+        run: |
+          {
+            echo "### Xserver production deployment"
+            echo "- Result: $RESULT"
+            echo "- Commit: $DEPLOY_SHA"
+            echo "- Site: https://miraiz.sofi-school.com/news"
+            echo "- Backup: ~/miraiz-deploy-backups/$BACKUP_ID.tar.gz"
+            echo "- No remote files were deleted; restore from the backup if verification failed."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Remove temporary SSH credential
+        if: always()
+        shell: bash
+        run: rm -f "$HOME/.ssh/xserver_deploy"
