@@ -42,8 +42,8 @@ miraiz-website/
    - 固定CTAバー
    - `assets/js/main.js` のフォーム送信失敗時メッセージ
 
-2. **`https://example.com/`**（`<link rel="canonical">` と JSON-LD の `url`）
-   実際の独自ドメインに置き換えてください。OGP画像も絶対URL（`https://ドメイン/assets/img/og-image.jpg`）にすると、SNSでのシェア時に確実に表示されます。
+2. ~~**公開ドメインとOGP URL**~~ → **設定済み**
+   正式ドメイン `https://miraiz.sofi-school.com/` を canonical、OGP、JSON-LD、サイトマップに反映済みです。
 
 3. ~~**校舎の詳細住所**~~ → **確定済み**
    〒661-0012 兵庫県尼崎市南塚口町1丁目12-8
@@ -98,7 +98,7 @@ const FALLBACK_MAIL_TO = 'miraiz.tsukaguchi.info@gmail.com';
 python3 scripts/update-news.py
 ```
 
-- **Xserverなどのレンタルサーバー**：`index.html`、`robots.txt`、`.nojekyll`、`assets/` を独自ドメインのドキュメントルートへアップロード
+- **Xserver**：`index.html`、`news.html`、`data/`、`assets/`、`robots.txt`、`sitemap.xml`、`.htaccess` を `/sofi-school.com/public_html/miraiz.sofi-school.com/` へアップロード
 - **Netlify / Vercel / Cloudflare Pages**：このディレクトリを公開ディレクトリに指定（ビルドコマンドなし）
 - **GitHub Pages**：下記の通り、`main` ブランチから直接公開されます
 
