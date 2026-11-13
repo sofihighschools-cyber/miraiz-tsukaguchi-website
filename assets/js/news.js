@@ -33,7 +33,7 @@
 
   const cardHtml = (item) => {
     const source = item.source === 'prtimes' ? 'prtimes' : 'note';
-    const sourceLabel = source === 'prtimes' ? 'PR TIMES' : 'note';
+    const sourceLabel = source === 'prtimes' ? 'PR TIMES' : 'Note';
     const href = isAllowedUrl(item.url) ? item.url : '#';
     const image = isAllowedUrl(item.image, true)
       ? `<img src="${escapeHtml(item.image)}" alt="" loading="lazy" width="800" height="450">`
@@ -88,7 +88,7 @@
       grid.innerHTML = items.map(cardHtml).join('');
       if (!items.length) grid.innerHTML = '<p class="news-empty">お知らせはまだありません。</p>';
       const synced = data.updated_at ? formatDate(data.updated_at) : '';
-      status.textContent = synced ? `note・PR TIMESから自動連携（最終データ更新：${synced}）` : '';
+      status.textContent = synced ? `Note・PR TIMESから自動連携（最終データ更新：${synced}）` : '';
     })
     .catch(() => {
       status.className = 'news-status is-error';
