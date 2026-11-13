@@ -148,7 +148,29 @@ jobs:
           curl --silent --show-error --connect-timeout 20 --max-time 60 \
             -D "$RUNNER_TEMP/http-headers" -o /dev/null http://miraiz.sofi-school.com/news
           grep -Eq '^HTTP/[^ ]+ 30[18]' "$RUNNER_TEMP/http-headers"
-          grep -Eiq '^location: https://miraiz\.sofi-school\.com/news\r?$' "$RUNNER_TEMP/http-headers"
+          tr -d '\r' < "$RUNNER_TEMP/http-headers" | grep -Eiq '^location: https://miraiz\.sofi-school\.com/news
+
+      - name: Record release and recovery location
+        if: always() && steps.backup.outcome == 'success'
+        shell: bash
+        env:
+          BACKUP_ID: ${{ steps.backup.outputs.id }}
+          RESULT: ${{ job.status }}
+        run: |
+          {
+            echo "### Xserver production deployment"
+            echo "- Result: $RESULT"
+            echo "- Commit: $DEPLOY_SHA"
+            echo "- Site: https://miraiz.sofi-school.com/news"
+            echo "- Backup: ~/miraiz-deploy-backups/$BACKUP_ID.tar.gz"
+            echo "- No remote files were deleted; restore from the backup if verification failed."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Remove temporary SSH credential
+        if: always()
+        shell: bash
+        run: rm -f "$HOME/.ssh/xserver_deploy"
+
 
       - name: Record release and recovery location
         if: always() && steps.backup.outcome == 'success'
