@@ -44,7 +44,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for path in index.html news.html assets data robots.txt sitemap.xml .htaccess; do
+          for path in index.html news.html hyogo-freeschool-guide.html assets data robots.txt sitemap.xml .htaccess; do
             test -e "$path"
           done
           test -z "$(find assets data -type l -print -quit)"
@@ -123,7 +123,7 @@ jobs:
         run: |
           set -euo pipefail
           rsync -rlptz --delay-updates --chmod=D755,F644 \
-            index.html news.html assets data robots.txt sitemap.xml .htaccess \
+            index.html news.html hyogo-freeschool-guide.html assets data robots.txt sitemap.xml .htaccess \
             "xserver-production:$SITE_RELATIVE/"
 
       - name: Verify deployed files and public HTTPS endpoints
@@ -131,15 +131,16 @@ jobs:
         run: |
           set -euo pipefail
           # Verify all uploaded bytes on the server, including dotfiles and assets.
-          { printf '%s\0' index.html news.html robots.txt sitemap.xml .htaccess; find assets data -type f -print0; } |
+          { printf '%s\0' index.html news.html hyogo-freeschool-guide.html robots.txt sitemap.xml .htaccess; find assets data -type f -print0; } |
             sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/deploy-manifest.sha256"
           ssh xserver-production "cd '$SITE_RELATIVE' && sha256sum --check --quiet" < "$RUNNER_TEMP/deploy-manifest.sha256"
-          for endpoint in / /news /data/news.json /robots.txt /sitemap.xml; do
+          for endpoint in / /news /hyogo-freeschool-guide /data/news.json /robots.txt /sitemap.xml; do
             curl --fail --silent --show-error --retry 3 --connect-timeout 20 --max-time 60 \
               "https://miraiz.sofi-school.com$endpoint" > "$RUNNER_TEMP/response"
             case "$endpoint" in
               /) cmp index.html "$RUNNER_TEMP/response" ;;
               /news) cmp news.html "$RUNNER_TEMP/response" ;;
+              /hyogo-freeschool-guide) cmp hyogo-freeschool-guide.html "$RUNNER_TEMP/response" ;;
               /data/news.json) cmp data/news.json "$RUNNER_TEMP/response" ;;
               /robots.txt) cmp robots.txt "$RUNNER_TEMP/response" ;;
               /sitemap.xml) cmp sitemap.xml "$RUNNER_TEMP/response" ;;

@@ -11,6 +11,7 @@ RewriteRule ^ https://miraiz.sofi-school.com%{REQUEST_URI} [R=301,L]
 
 # Vercelと同じ /news のURLで静的HTMLを配信
 RewriteRule ^news/?$ news.html [L]
+RewriteRule ^hyogo-freeschool-guide/?$ hyogo-freeschool-guide.html [L]
 
 # アップロード用アーカイブやバックアップを公開しない
 RewriteRule ^miraiz-tsukaguchi-website-deploy-xserver-miraiz(?:/|\.zip$) - [F,L]
