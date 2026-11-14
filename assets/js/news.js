@@ -48,7 +48,7 @@
           <div class="news-card__body">
             <time datetime="${escapeHtml(item.published)}">${formatDate(item.published)}</time>
             <h3>${escapeHtml(item.title)}</h3>
-            ${item.description ? `<p class="news-card__description">${escapeHtml(item.description)}</p>` : ''}
+            ${item.description && !grid.dataset.limit ? `<p class="news-card__description">${escapeHtml(item.description)}</p>` : ''}
             <span class="news-card__more">記事を読む <span aria-hidden="true">↗</span></span>
           </div>
         </a>
@@ -84,7 +84,11 @@
       return response.json();
     })
     .then((data) => {
-      const items = Array.isArray(data.items) ? data.items : [];
+      const allItems = Array.isArray(data.items) ? data.items : [];
+      const limit = Number.parseInt(grid.dataset.limit, 10);
+      const items = Number.isInteger(limit) && limit > 0
+        ? [...allItems].sort((a, b) => (Date.parse(b.published) || 0) - (Date.parse(a.published) || 0)).slice(0, limit)
+        : allItems;
       grid.innerHTML = items.map(cardHtml).join('');
       if (!items.length) grid.innerHTML = '<p class="news-empty">お知らせはまだありません。</p>';
       const synced = data.updated_at ? formatDate(data.updated_at) : '';
