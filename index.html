@@ -25,6 +25,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/news.css">
 
 <script type="application/ld+json">
 {
@@ -124,6 +125,21 @@
       </div>
       <a class="hero__trial" href="#contact"><b>1週間無料体験</b>受付中</a>
     </div>
+  </div>
+</section>
+
+<!-- ============ LATEST NEWS ============ -->
+<section class="news-section" id="news" aria-labelledby="home-news-heading">
+  <div class="container">
+    <header class="sec-head">
+      <p class="sec-head__eyebrow">news &amp; stories</p>
+      <h2 class="sec-head__title" id="home-news-heading">お知らせ</h2>
+      <p class="sec-head__note">MIRAIZの最新情報と、保護者の方に役立つ読みもの。</p>
+    </header>
+    <p class="news-status" id="news-status" role="status" aria-live="polite">最新情報を読み込んでいます…</p>
+    <div class="news-grid" id="news-grid" data-limit="3"></div>
+    <noscript><p>最新の記事は<a href="/news">お知らせ一覧</a>からご覧いただけます。</p></noscript>
+    <p class="center-note" style="margin-top:2rem"><a class="btn btn--ghost" href="/news">お知らせをすべて見る <span aria-hidden="true">→</span></a></p>
   </div>
 </section>
 
@@ -817,5 +833,6 @@
 </div>
 
 <script src="assets/js/main.js" defer></script>
+<script src="assets/js/news.js?v=home-preview-20261114" defer></script>
 </body>
 </html>
