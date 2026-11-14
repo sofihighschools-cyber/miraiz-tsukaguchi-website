@@ -90,11 +90,16 @@
         ? [...allItems].sort((a, b) => (Date.parse(b.published) || 0) - (Date.parse(a.published) || 0)).slice(0, limit)
         : allItems;
       grid.innerHTML = items.map(cardHtml).join('');
+      applyFilter(filters.find((button) => button.getAttribute('aria-pressed') === 'true')?.dataset.filter || 'all');
       if (!items.length) grid.innerHTML = '<p class="news-empty">お知らせはまだありません。</p>';
       const synced = data.updated_at ? formatDate(data.updated_at) : '';
       status.textContent = synced ? `Note・PR TIMESから自動連携（最終データ更新：${synced}）` : '';
     })
     .catch(() => {
+      if (grid.querySelector('.news-card')) {
+        status.textContent = '掲載済みの記事を表示しています。最新情報は各公式ページでもご確認いただけます。';
+        return;
+      }
       status.className = 'news-status is-error';
       status.textContent = 'お知らせを読み込めませんでした。時間をおいて再度お試しください。';
     });

@@ -65,8 +65,7 @@
         "closes": "15:00"
       },
       "sameAs": [
-        "https://note.com/miraiz_t",
-        "https://prtimes.jp/main/html/searchrlp/company_id/189122"
+        "https://note.com/miraiz_t"
       ],
       "parentOrganization": { "@type": "Organization", "name": "SOFI株式会社" }
     },
@@ -123,7 +122,7 @@
         <li><a href="#contents">4つのコンテンツ</a></li>
         <li><a href="#price">料金</a></li>
         <li><a href="#faq">よくある質問</a></li>
-        <li><a href="news.html">お知らせ</a></li>
+        <li><a href="/news">お知らせ</a></li>
       </ul>
       <div class="nav__cta">
         <a class="btn btn--line" href="tel:0664156977"><span aria-hidden="true">☎</span> 06-6415-6977</a>
@@ -210,8 +209,36 @@
       <h2 class="sec-head__title" id="home-news-heading">お知らせ</h2>
       <p class="sec-head__note">MIRAIZの最新情報と、保護者の方に役立つ読みもの。</p>
     </header>
-    <p class="news-status" id="news-status" role="status" aria-live="polite">最新情報を読み込んでいます…</p>
-    <div class="news-grid" id="news-grid" data-limit="3"></div>
+    <p class="news-status" id="news-status" role="status" aria-live="polite">MIRAIZの最新記事をご紹介します。</p>
+    <div class="news-grid" id="news-grid" data-limit="3"><!-- news-cards:start -->
+<article class="news-card" data-source="note">
+  <a class="news-card__link" href="https://note.com/miraiz_t/n/n78e1f33f21a8" target="_blank" rel="noopener noreferrer">
+    <div class="news-card__media"><img src="https://assets.st-note.com/production/uploads/images/335310900/rectangle_large_type_2_c1f20607db1147ce80b4e0cdb285d7c5.png?width=800" alt="" loading="lazy" width="800" height="450"><span class="news-card__source news-card__source--note">Note</span></div>
+    <div class="news-card__body"><time datetime="2026-11-12T20:44:30+09:00">2026/11/12</time>
+      <h3>不登校の「親の会」、初めて参加する前に何を聞けばいい？</h3>
+      <span class="news-card__more">記事を読む <span aria-hidden="true">↗</span></span>
+    </div>
+  </a>
+</article>
+<article class="news-card" data-source="note">
+  <a class="news-card__link" href="https://note.com/miraiz_t/n/nfc050c7fcff2" target="_blank" rel="noopener noreferrer">
+    <div class="news-card__media"><img src="https://assets.st-note.com/production/uploads/images/334800040/rectangle_large_type_2_d0541151114c1fd3ef0e56af1b0b5742.png?width=800" alt="" loading="lazy" width="800" height="450"><span class="news-card__source news-card__source--note">Note</span></div>
+    <div class="news-card__body"><time datetime="2026-11-11T13:41:07+09:00">2026/11/11</time>
+      <h3>毎朝の欠席連絡がつらいとき。学校と相談したい、続けられる連絡の形</h3>
+      <span class="news-card__more">記事を読む <span aria-hidden="true">↗</span></span>
+    </div>
+  </a>
+</article>
+<article class="news-card" data-source="prtimes">
+  <a class="news-card__link" href="https://prtimes.jp/main/html/rd/p/000000002.000189122.html" target="_blank" rel="noopener noreferrer">
+    <div class="news-card__media"><img src="https://prcdn.freetls.fastly.net/release_image/189122/2/189122-2-9d56c34b96c2962bfffcd9c58e311241-3900x2925.jpg?format=jpeg&amp;auto=webp&amp;fit=bounds&amp;width=2400&amp;height=1260" alt="" loading="lazy" width="800" height="450"><span class="news-card__source news-card__source--prtimes">PR TIMES</span></div>
+    <div class="news-card__body"><time datetime="2026-11-05T08:10:02+09:00">2026/11/05</time>
+      <h3>地元大学生が、神戸大学大学院教授監修のもと地域企業と連携してフリースクールを阪急塚口に開校</h3>
+      <span class="news-card__more">記事を読む <span aria-hidden="true">↗</span></span>
+    </div>
+  </a>
+</article>
+<!-- news-cards:end --></div>
     <noscript><p>最新の記事は<a href="/news">お知らせ一覧</a>からご覧いただけます。</p></noscript>
     <p class="center-note" style="margin-top:2rem"><a class="btn btn--ghost" href="/news">お知らせをすべて見る <span aria-hidden="true">→</span></a></p>
   </div>
@@ -878,7 +905,7 @@
     </div>
     <nav class="footer__nav" aria-label="フッターメニュー">
       <ul>
-        <li><a href="news.html">お知らせ</a></li>
+        <li><a href="/news">お知らせ</a></li>
         <li><a href="/hyogo-freeschool-guide">兵庫県のフリースクール選び</a></li>
         <li><a href="#about">MIRAIZとは</a></li>
         <li><a href="#contents">4つのコンテンツ</a></li>
@@ -908,6 +935,6 @@
 </div>
 
 <script src="assets/js/main.js" defer></script>
-<script src="assets/js/news.js?v=home-preview-20261114" defer></script>
+<script src="assets/js/news.js?v=static-feed-20261114" defer></script>
 </body>
 </html>

@@ -85,10 +85,23 @@ const FALLBACK_MAIL_TO = 'miraiz.tsukaguchi.info@gmail.com';
 
 ## お知らせの自動連携
 
+記事取得後に `python3 scripts/render-news.py` を実行し、トップの最新3件とお知らせ一覧をHTMLにも反映します。JavaScriptを実行しないクローラーや通信失敗時にも記事へのリンクを提供します。更新ワークフローはJSON・両HTMLを同一コミットとして保存し、Xserverへ自動反映します。公開記事を削除する際はRSS取得後に再生成して掲載状態を確認してください。
+
+## SEOの運用
+
+- 正式URLは `/`、`/news`、`/hyogo-freeschool-guide`。Xserverでは旧 `.html` URLと末尾スラッシュを301転送します。
+- Search Consoleで `https://miraiz.sofi-school.com/` の所有権を確認後、`sitemap.xml` を送信し、3つの正規URLの登録状況を確認してください。サイトマップの設置だけでは登録状況は確認できません。
+- 「フリースクール 塚口」「MIRAIZ塚口」「フリースクール おすすめ 兵庫」の表示回数・クリック数・平均掲載順位を記録し、28日単位で比較します。順位やリッチリザルトの表示は保証されません。一般の教育施設ではFAQ構造化データを追加してもGoogleのFAQリッチリザルト表示は通常期待できません。
+- Googleビジネスプロフィールでは正式名称・住所・実際の連絡先・営業時間を揃え、教室写真と公式URLを登録してください。現在の電話番号は既存掲載の本部窓口です。校舎専用番号がある場合はサイトとプロフィールを同時に更新します。
+- 実在する連携先や地域の公的一覧への掲載を検討してください。被リンクの購入や架空の口コミ・順位表示は行いません。
+- ガイドの更新時には見える更新日、Articleの日付、サイトマップの日付を実際の変更日に合わせます。保護者が判断に使う費用、通学日、出席扱いは最新の一次情報で確認します。
+
+### 記事更新の実行
+
 `news.html` は、MIRAIZ塚口のnote公式RSSとSOFI株式会社のPR TIMES公式RSSから取得した記事を、日付順にまとめて表示します。
 
 - GitHub Actionsが6時間ごとに `scripts/update-news.py` を実行
-- 更新がある場合だけ `data/news.json` をコミット
+- 更新がある場合だけ `data/news.json`・生成済みの両HTMLをコミット
 - RSS取得に一時的に失敗した場合は、前回取得済みの記事を保持
 - GitHubの「Actions」→「お知らせ自動更新」→「Run workflow」から手動更新も可能
 
@@ -96,9 +109,10 @@ const FALLBACK_MAIL_TO = 'miraiz.tsukaguchi.info@gmail.com';
 
 ```bash
 python3 scripts/update-news.py
+python3 scripts/render-news.py
 ```
 
-- **Xserver**：`index.html`、`news.html`、`data/`、`assets/`、`robots.txt`、`sitemap.xml`、`.htaccess` を `/sofi-school.com/public_html/miraiz.sofi-school.com/` へアップロード
+- **Xserver**：`index.html`、`news.html`、`hyogo-freeschool-guide.html`、`data/`、`assets/`、`robots.txt`、`sitemap.xml`、`.htaccess` を `/sofi-school.com/public_html/miraiz.sofi-school.com/` へアップロード
 - **Netlify / Vercel / Cloudflare Pages**：このディレクトリを公開ディレクトリに指定（ビルドコマンドなし）
 - **GitHub Pages**：下記の通り、`main` ブランチから直接公開されます
 

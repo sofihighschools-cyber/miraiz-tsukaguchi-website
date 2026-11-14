@@ -9,7 +9,16 @@ RewriteCond %{HTTP_HOST} !^miraiz\.sofi-school\.com$ [NC,OR]
 RewriteCond %{HTTPS} !=on
 RewriteRule ^ https://miraiz.sofi-school.com%{REQUEST_URI} [R=301,L]
 
-# Vercelと同じ /news のURLで静的HTMLを配信
+# 外部から要求された旧URLのみ転送（内部書き換え時のループを防止）
+RewriteCond %{THE_REQUEST} \s/+index\.html(?:[?\s]) [NC]
+RewriteRule ^index\.html$ / [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+news\.html(?:[?\s]) [NC]
+RewriteRule ^news\.html$ /news [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+hyogo-freeschool-guide\.html(?:[?\s]) [NC]
+RewriteRule ^hyogo-freeschool-guide\.html$ /hyogo-freeschool-guide [R=301,L]
+RewriteRule ^(news|hyogo-freeschool-guide)/$ /$1 [R=301,L]
+
+# 正規URLから静的HTMLを配信
 RewriteRule ^news/?$ news.html [L]
 RewriteRule ^hyogo-freeschool-guide/?$ hyogo-freeschool-guide.html [L]
 
