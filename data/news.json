@@ -1,10 +1,18 @@
 {
-  "updated_at": "2026-11-12T11:52:06.854570+00:00",
+  "updated_at": "2026-11-16T06:24:08.046622+00:00",
   "sources": {
     "note": "https://note.com/miraiz_t/rss",
     "prtimes": "https://prtimes.jp/companyrdf.php?company_id=189122"
   },
   "items": [
+    {
+      "source": "note",
+      "title": "スクールソーシャルワーカーには何を相談できる？ 尼崎で支援のつながりを考える",
+      "url": "https://note.com/miraiz_t/n/n20e5a342aaf9",
+      "published": "2026-11-16T11:23:50+09:00",
+      "description": "「スクールソーシャルワーカーという人に相談してみませんか？」学校からそう言われても、どんな人なのか、何を相談できるのか、すぐには分からないかもしれません。",
+      "image": "https://assets.st-note.com/production/uploads/images/336731393/rectangle_large_type_2_c67de7a166e31ea8ff652ed3d977029a.png?width=800"
+    },
     {
       "source": "note",
       "title": "不登校の「親の会」、初めて参加する前に何を聞けばいい？",
