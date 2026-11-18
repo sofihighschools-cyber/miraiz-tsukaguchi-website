@@ -1,10 +1,18 @@
 {
-  "updated_at": "2026-11-16T06:24:08.046622+00:00",
+  "updated_at": "2026-11-18T07:24:51.252083+00:00",
   "sources": {
     "note": "https://note.com/miraiz_t/rss",
     "prtimes": "https://prtimes.jp/companyrdf.php?company_id=189122"
   },
   "items": [
+    {
+      "source": "note",
+      "title": "学校行事が気になるけれど、参加は迷う。学校に相談しておきたいこと",
+      "url": "https://note.com/miraiz_t/n/n761ace3fa319",
+      "published": "2026-11-18T11:45:41+09:00",
+      "description": "「運動会、ちょっと気になるかも」「みんなの作品、見てみたいな」",
+      "image": "https://assets.st-note.com/production/uploads/images/337537529/rectangle_large_type_2_2d0dec4f201150b52959e460d93e83bc.png?width=800"
+    },
     {
       "source": "note",
       "title": "スクールソーシャルワーカーには何を相談できる？ 尼崎で支援のつながりを考える",
