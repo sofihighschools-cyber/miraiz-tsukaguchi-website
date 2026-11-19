@@ -29,6 +29,7 @@
 .news-filter:hover{ transform:translateY(-2px); border-color:var(--c-key); }
 .news-filter.is-active{ background:var(--c-ink); border-color:var(--c-ink); color:#fff; }
 .news-status{ min-height:2rem; margin-bottom:1rem; color:var(--c-ink-70); font-size:.9rem; }
+.news-status:empty{ display:none; }
 .news-status.is-error{ color:#a51f35; background:#fff0f2; padding:1rem 1.2rem; border-radius:var(--r-sm); }
 
 .news-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(1rem,2.5vw,1.7rem); }

@@ -92,8 +92,6 @@
       grid.innerHTML = items.map(cardHtml).join('');
       applyFilter(filters.find((button) => button.getAttribute('aria-pressed') === 'true')?.dataset.filter || 'all');
       if (!items.length) grid.innerHTML = '<p class="news-empty">お知らせはまだありません。</p>';
-      const synced = data.updated_at ? formatDate(data.updated_at) : '';
-      status.textContent = synced ? `Note・PR TIMESから自動連携（最終データ更新：${synced}）` : '';
     })
     .catch(() => {
       if (grid.querySelector('.news-card')) {

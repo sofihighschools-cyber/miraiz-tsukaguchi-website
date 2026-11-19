@@ -47,7 +47,6 @@
 .guide-aside__card h2{ margin-bottom:.8rem; font-size:1.3rem; }
 .guide-aside__card p{ color:var(--c-ink-70); font-size:.88rem; }
 .guide-aside__card .btn{ width:100%; white-space:normal; }
-.guide-aside__tel{ display:block; margin-top:1rem; font-family:var(--font-round); font-weight:900; }
 
 .guide-cta{ padding:clamp(3rem,7vw,5rem) 0; background:linear-gradient(135deg,#fff2ca,#e9f7ff); }
 .guide-cta__inner{ display:flex; align-items:center; justify-content:space-between; gap:2rem; }
