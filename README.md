@@ -2,7 +2,7 @@
 
 SOFI株式会社が2026年9月に開校するフリースクール「MIRAIZ（ミライズ）阪急塚口校」の公式ホームページです。
 
-ビルド不要の静的サイト（HTML / CSS / JavaScript のみ）。`index.html` をそのままサーバーに置けば公開できます。
+ビルド不要のHTML / CSS / JavaScriptサイトです。お問い合わせ送信にはXserver上のPHPを使用します。
 
 ```
 miraiz-website/
@@ -56,32 +56,22 @@ miraiz-website/
      提案資料の「ご相談箇所」では 10:00〜13:00／13:00〜17:00 案、A・Bコース案も併記されていたため、
      サイト上は「※開校時間・クラス編成は予定です」と注記しています。確定後に注記を削除してください。
 
-5. ~~**お問い合わせフォームの送信先**~~ → **設定済み**（`miraiz.tsukaguchi.info@gmail.com`／下記参照）
+5. ~~**お問い合わせフォームの送信先**~~ → **設定済み**（`contact@sofi-school.com`／下記参照）
 
 ## お問い合わせフォームの設定
 
-現在は、送信ボタンを押すと**入力内容を差し込んだメール作成画面が開く**フォールバック動作です。
-宛先は `assets/js/main.js` 冒頭の定数で設定しています。
+公式サイトのフォームは `contact.php` に同一オリジンで送信し、XserverのPHP `mail()` から **contact@sofi-school.com** に届けます。PHP 7.3以降と送信可能なメール環境が必要です。静的プレビューではメール送信できません。
 
-```js
-const FALLBACK_MAIL_TO = 'miraiz.tsukaguchi.info@gmail.com';
-```
-
-この方式は送信者のメールソフトが立ち上がるため、**スマホやWebメール環境では送信が完了しないことがあります**。
-確実に受信したい場合は、下記のフォームサービス連携をおすすめします。
-
-サーバーやフォームサービス（Formspree、Google Apps Script など）に POST したい場合は、
-`index.html` のフォームタグに送信先URLを設定します。設定すると自動的に `fetch` での非同期送信に切り替わります。
-
-```html
-<form class="contact__form" id="contact-form" data-endpoint="https://…" novalidate>
-```
-
-`FormData` として、`name` / `role` / `grade` / `tel` / `email` / `purpose`（複数）/ `message` / `agree` が送信されます。
+- From / envelope sender: `contact@sofi-school.com`（固定）。入力メールは検証後に Reply-To にだけ使用します。
+- 必須項目・選択肢・文字数・メール形式をサーバーでも検証します。CSRFトークン、ハニーポット、IPハッシュの固定バケットによる毎時5回の制限を設けています。
+- 同じセッション・同じ内容の1時間以内の再送は重複送信しません。失敗時は入力を保持します。
+- 問い合わせ本文はアプリのファイルやログに保存しません。セッションにはトークン・送信内容のハッシュと時刻だけを保存し、レート制限には一時ディレクトリを使用します。
+- `mail()` 成功はサーバーによる送信受付です。受信箱・迷惑メールフォルダーへの到着は別途確認してください。配送不達は envelope sender の受信箱とXserverのメール設定（SPF/DKIM等）を確認します。
+- `php -l contact.php` と `python3 tests/contact_test.py` で、実際のメールを送らず送信・検証・重複防止・レート制限・送信障害を確認できます。
 
 ## 公開方法
 
-静的ファイルのみなので、置くだけで動きます。
+mainへのpushでXserverへ自動公開します。`contact.php` も配置し、PHP実行とJSONレスポンスを確認します。
 
 ## お知らせの自動連携
 
@@ -112,7 +102,7 @@ python3 scripts/update-news.py
 python3 scripts/render-news.py
 ```
 
-- **Xserver**：`index.html`、`news.html`、`hyogo-freeschool-guide.html`、`data/`、`assets/`、`robots.txt`、`sitemap.xml`、`.htaccess` を `/sofi-school.com/public_html/miraiz.sofi-school.com/` へアップロード
+- **Xserver**：`index.html`、`news.html`、`hyogo-freeschool-guide.html`、`contact.php`、`data/`、`assets/`、`robots.txt`、`sitemap.xml`、`.htaccess` を `/sofi-school.com/public_html/miraiz.sofi-school.com/` へアップロード
 - **Netlify / Vercel / Cloudflare Pages**：このディレクトリを公開ディレクトリに指定（ビルドコマンドなし）
 - **GitHub Pages**：下記の通り、`main` ブランチから直接公開されます
 

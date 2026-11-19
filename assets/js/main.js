@@ -5,13 +5,6 @@
 (() => {
   'use strict';
 
-  /* ---------- 送信先メールアドレス -------------------------
-     お問い合わせフォームの送信先。
-     フォームの data-endpoint（index.html）が空のときは、
-     入力内容を差し込んだメール作成画面を開くフォールバックで動作します。
-     ------------------------------------------------------- */
-  const FALLBACK_MAIL_TO = 'miraiz.tsukaguchi.info@gmail.com';
-
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* =======================================================
@@ -167,46 +160,34 @@
         return;
       }
 
-      const data = {
-        お名前: form.elements.name.value.trim(),
-        ご記入者: form.elements.role.value,
-        学年: form.elements.grade.value || '（未選択）',
-        電話番号: form.elements.tel.value.trim(),
-        メールアドレス: form.elements.email.value.trim() || '（未入力）',
-        ご希望の内容: purposes().join('、'),
-        ご相談内容: form.elements.message.value.trim() || '（未入力）',
-      };
-
       const endpoint = form.dataset.endpoint;
       const submitBtn = form.querySelector('button[type="submit"]');
-
-      if (!endpoint) {
-        // フォールバック：メール作成画面を開く
-        const body = Object.entries(data)
-          .map(([k, v]) => `${k}：${v}`)
-          .join('\n');
-        const url =
-          `mailto:${FALLBACK_MAIL_TO}` +
-          `?subject=${encodeURIComponent('【MIRAIZ阪急塚口校】お問い合わせ')}` +
-          `&body=${encodeURIComponent(`${body}\n\n--\nフリースクール MIRAIZ 阪急塚口校 サイトより送信`)}`;
-        window.location.href = url;
-        setStatus('メール作成画面を開きました。そのまま送信してください。', 'ok');
-        return;
-      }
+      if (submitBtn.disabled) return;
 
       submitBtn.disabled = true;
       setStatus('送信中です…');
       try {
+        const tokenResponse = await fetch(endpoint, { headers: { Accept: 'application/json' }, cache: 'no-store' });
+        const session = await tokenResponse.json();
+        if (!tokenResponse.ok || !session.token) throw new Error('送信の準備ができませんでした。時間をおいてお試しください。');
+        const payload = new FormData(form);
+        payload.set('token', session.token);
+        payload.delete('purpose');
+        purposes().forEach((purpose) => payload.append('purpose[]', purpose));
         const res = await fetch(endpoint, {
           method: 'POST',
           headers: { Accept: 'application/json' },
-          body: new FormData(form),
+          body: payload,
         });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const result = await res.json();
+        if (!res.ok || result.ok !== true) throw new Error(result.message || '送信できませんでした。時間をおいてお試しください。');
         form.reset();
         setStatus('送信しました。担当者より2〜3営業日以内にご連絡いたします。', 'ok');
       } catch (err) {
-        setStatus('送信に失敗しました。お手数ですが 06-6415-6977 までお電話ください。', 'error');
+        const detail = err instanceof TypeError || err instanceof SyntaxError
+          ? '通信を確認できませんでした。入力内容は保持しています。同じ画面から再度送信するか、06-6415-6977 までお電話ください。'
+          : err.message;
+        setStatus(detail, 'error');
       } finally {
         submitBtn.disabled = false;
       }

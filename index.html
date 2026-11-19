@@ -48,7 +48,7 @@
       "logo": "https://miraiz.sofi-school.com/assets/img/logo-miraiz.png",
       "image": "https://miraiz.sofi-school.com/assets/img/og-image.jpg",
       "telephone": "+81-6-6415-6977",
-      "email": "miraiz.tsukaguchi.info@gmail.com",
+      "email": "contact@sofi-school.com",
       "address": {
         "@type": "PostalAddress",
         "addressCountry": "JP",
@@ -793,7 +793,7 @@
         <a class="contact__tel" href="tel:0664156977">06-6415-6977</a>
         <p class="contact__direct-note">受付：平日 10:00〜17:00<br>FAX：06-6415-6978</p>
         <p class="contact__direct-label contact__direct-label--mail">メールでのお問い合わせ</p>
-        <a class="contact__mail" href="mailto:miraiz.tsukaguchi.info@gmail.com">miraiz.tsukaguchi.info@gmail.com</a>
+        <a class="contact__mail" href="mailto:contact@sofi-school.com">contact@sofi-school.com</a>
         <hr>
         <ul class="contact__assure">
           <li>保護者さまだけのご相談も歓迎です</li>
@@ -808,10 +808,12 @@
         </p>
       </div>
 
-      <form class="contact__form" id="contact-form" data-endpoint="" novalidate>
+      <form class="contact__form" id="contact-form" action="/contact.php" method="post" data-endpoint="/contact.php" novalidate>
+        <noscript><p>フォームの送信にはJavaScriptを有効にしてください。お電話でもお問い合わせいただけます。</p></noscript>
+        <div hidden aria-hidden="true"><label>この項目は入力しないでください<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
         <p class="form-row">
           <label for="f-name">お名前 <span class="req">必須</span></label>
-          <input type="text" id="f-name" name="name" required autocomplete="name" placeholder="山田 太郎">
+          <input type="text" id="f-name" name="name" required maxlength="100" autocomplete="name" placeholder="山田 太郎">
         </p>
         <p class="form-row">
           <label for="f-role">ご記入者 <span class="req">必須</span></label>
@@ -835,11 +837,11 @@
         </p>
         <p class="form-row">
           <label for="f-tel">電話番号 <span class="req">必須</span></label>
-          <input type="tel" id="f-tel" name="tel" required autocomplete="tel" inputmode="tel" placeholder="06-1234-5678">
+          <input type="tel" id="f-tel" name="tel" required maxlength="30" autocomplete="tel" inputmode="tel" placeholder="06-1234-5678">
         </p>
         <p class="form-row">
           <label for="f-email">メールアドレス</label>
-          <input type="email" id="f-email" name="email" autocomplete="email" placeholder="example@mail.com">
+          <input type="email" id="f-email" name="email" maxlength="254" autocomplete="email" placeholder="example@mail.com">
         </p>
         <fieldset class="form-row form-row--full">
           <legend>ご希望の内容 <span class="req">必須</span></legend>
@@ -852,9 +854,10 @@
         </fieldset>
         <p class="form-row form-row--full">
           <label for="f-message">ご相談内容・ご質問</label>
-          <textarea id="f-message" name="message" rows="5" placeholder="お子さまの状況やご不安な点など、書ける範囲でお知らせください。"></textarea>
+          <textarea id="f-message" name="message" rows="5" maxlength="5000" placeholder="お子さまの状況やご不安な点など、書ける範囲でお知らせください。"></textarea>
         </p>
         <p class="form-row form-row--full form-agree">
+          <span>ご入力いただいた情報は、お問い合わせへの対応・ご連絡に使用します。</span>
           <label><input type="checkbox" id="f-agree" name="agree" required> <span>個人情報の取り扱いに同意します <span class="req">必須</span></span></label>
         </p>
         <p class="form-submit">
@@ -922,7 +925,7 @@
     <div class="footer__info">
       <p class="footer__co">SOFI株式会社</p>
       <p>フリースクール MIRAIZ 阪急塚口校<br>〒661-0012 兵庫県尼崎市南塚口町1丁目12-8 サウサービル401</p>
-      <p><a href="tel:0664156977">TEL 06-6415-6977</a><br>FAX 06-6415-6978<br><a href="mailto:miraiz.tsukaguchi.info@gmail.com">miraiz.tsukaguchi.info@gmail.com</a></p>
+      <p><a href="tel:0664156977">TEL 06-6415-6977</a><br>FAX 06-6415-6978<br><a href="mailto:contact@sofi-school.com">contact@sofi-school.com</a></p>
     </div>
   </div>
   <p class="footer__copy">&copy; SOFI Inc. All rights reserved.</p>
@@ -934,7 +937,7 @@
   <a class="cta-bar__btn" href="#contact">見学・体験を申し込む</a>
 </div>
 
-<script src="assets/js/main.js" defer></script>
+<script src="assets/js/main.js?v=20261119-contact" defer></script>
 <script src="assets/js/news.js?v=20261119" defer></script>
 </body>
 </html>

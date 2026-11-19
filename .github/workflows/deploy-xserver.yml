@@ -44,7 +44,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for path in index.html news.html hyogo-freeschool-guide.html assets data robots.txt sitemap.xml .htaccess; do
+          for path in index.html news.html hyogo-freeschool-guide.html contact.php assets data robots.txt sitemap.xml .htaccess; do
             test -e "$path"
           done
           test -z "$(find assets data -type l -print -quit)"
@@ -56,6 +56,12 @@ jobs:
           assert {"note", "prtimes"} <= {item["source"] for item in data["items"]}
           PY
           echo "DEPLOY_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Test contact endpoint without sending email
+        run: |
+          php -l contact.php
+          node --check assets/js/main.js
+          python3 tests/contact_test.py
 
       - name: Configure SSH and verify server identity
         shell: bash
@@ -123,7 +129,7 @@ jobs:
         run: |
           set -euo pipefail
           rsync -rlptz --delay-updates --chmod=D755,F644 \
-            index.html news.html hyogo-freeschool-guide.html assets data robots.txt sitemap.xml .htaccess \
+            index.html news.html hyogo-freeschool-guide.html contact.php assets data robots.txt sitemap.xml .htaccess \
             "xserver-production:$SITE_RELATIVE/"
 
       - name: Verify deployed files and public HTTPS endpoints
@@ -131,9 +137,11 @@ jobs:
         run: |
           set -euo pipefail
           # Verify all uploaded bytes on the server, including dotfiles and assets.
-          { printf '%s\0' index.html news.html hyogo-freeschool-guide.html robots.txt sitemap.xml .htaccess; find assets data -type f -print0; } |
+          { printf '%s\0' index.html news.html hyogo-freeschool-guide.html contact.php robots.txt sitemap.xml .htaccess; find assets data -type f -print0; } |
             sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/deploy-manifest.sha256"
           ssh xserver-production "cd '$SITE_RELATIVE' && sha256sum --check --quiet" < "$RUNNER_TEMP/deploy-manifest.sha256"
+          curl --fail --silent --show-error --max-time 30 https://miraiz.sofi-school.com/contact.php |
+            python3 -c 'import json,sys; r=json.load(sys.stdin); assert r["ok"] is True and len(r["token"]) == 64'
           for endpoint in / /news /hyogo-freeschool-guide /data/news.json /robots.txt /sitemap.xml; do
             curl --fail --silent --show-error --retry 3 --connect-timeout 20 --max-time 60 \
               "https://miraiz.sofi-school.com$endpoint" > "$RUNNER_TEMP/response"
